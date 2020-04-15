@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>My First Flask Form</title>
+</head>
+<body>
+	<form action="/login" method="post" enctype="multipart/form-data">
+		<label for="">UserName : </label>
+		<input type="text" name="uname" id="username">
+		<label for="">Password : </label>
+		<input type="password" name="password" id="password">
+		<input type="file" name="samplefile" id="file">
+		<input type="submit" value="Submit">
+		<input type="reset" value="Reset">
+	</form>
+</body>
+</html>
