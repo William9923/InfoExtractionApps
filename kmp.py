@@ -18,8 +18,10 @@ def knuth_morris_prath(pattern, text) :
 		if (pattern[j] == text[i]):
 			if (j == m - 1) :
 				index_arr.append(i - m + 1)
+				j = 0
+			else :
+				j+=1
 			i+=1
-			j+=1
 		elif j > 0:
 			j = fail[j-1]
 		else :
