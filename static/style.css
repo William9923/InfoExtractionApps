@@ -16,3 +16,8 @@ button {
 	margin-top : 15px;
 	margin-left: -20px;
 }
+
+.input[type=text] {
+ border-bottom: 1px solid purple;
+ box-shadow: 0 1px 0 0 purple;
+}

@@ -10,6 +10,7 @@ from kmp import *
 from regex import * 
 from bm import *
 import re
+from flask import Markup
 
 def create_file(files):
     list_of_files = []
@@ -91,8 +92,10 @@ def check_nearest_date(text, index_text): # mirip kek cara di bawah aja, tp pake
 
 
 def check_nearest_digit(text, index_text):
-    digit_pattern = re.compile(r"\d+")
+    digit_pattern = re.compile(r" \d+[\.|,]?\d+ ")
     result = check_nearest(digit_pattern,text,index_text)
+    if result is not None:
+        result['object'] = result['object'].strip()
     return result
 
 def divider(list_of_news):
@@ -107,7 +110,7 @@ def divider(list_of_news):
 
 
 def preprocessing(text):
-    return text.strip().lower().replace('\n','')
+    return Markup(text.strip().lower().replace('\n','')).striptags()
 
 
 def create_answer(algo, keyword,list_of_files):
@@ -153,10 +156,32 @@ def get_text_match_pattern(algo, keyword, news):
                     )
     return list_of_answer
 
+def get_color(case):
+    return {
+        'date' : 'light-green',
+        'key' : 'purple-text',
+        'digit' : 'cyan-text'
+    }.get(case)
+
+def connect_date(date_list, index):
+    pass 
+
+def change_color(answer):
+    # change the digit color:
+    if answer['digit'] is not None:
+        answer['text'] = Markup(answer['text'].replace(f" {answer['digit']['object']} ",f'<span class="{get_color("digit")}"> {answer["digit"]["object"]} </span>'))
+    if answer["contains_date"]:
+        for date in answer['date']:
+            answer['text'] = Markup(re.sub(f' (?i){date["object"]} ',f'<span class="{get_color("date")}"> {date["object"]} </span>', answer['text']))
+    answer['text'] = Markup(re.sub(f'(?i){answer["keyword"]}',f'<span class="{get_color("key")}">{answer["keyword"]}</span>', answer['text']))
+    return answer
+
+
 """
     Adding the span class for output 
 """
 def process_output(answer):
+    answer = change_color(answer)
     return {
         "digit" : answer['digit'].get('object'),
         "text" : answer['text'],
